@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addToCartController, getCartItemsController } from "../controllers/cart.controller.js";
+import { addToCartController, decreaseCartItemController, getCartItemsController } from "../controllers/cart.controller.js";
 import { authUserMiddleware } from "../middlewares/auth.middleware.js";
 
 
@@ -18,6 +18,13 @@ cartRouter.get("/", authUserMiddleware ,getCartItemsController);
  * @access Private
  */
 cartRouter.post("/", authUserMiddleware, addToCartController);
+
+/**
+ * @description Decrease a product from the cart or remove it if quantity becomes 0
+ * @route PATCH /api/cart/
+ * @access Private
+ */
+cartRouter.patch("/", authUserMiddleware, decreaseCartItemController);
 
 
 export default cartRouter;
