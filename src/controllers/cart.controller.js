@@ -1,13 +1,13 @@
-import { getCartItemsService } from "../services/cart.service.js";
+import { getCartItemsService, addToCartService } from "../services/cart.service.js";
 
 
 
 export const getCartItemsController = async (req, res) => {
     // get userId from params
-    const { userId } = req.user;
+    const { id } = req.user;
 
     // get cart items for the user from the service
-    const cartItems = await getCartItemsService(userId);
+    const cartItems = await getCartItemsService(id);
 
     res.status(200).json({
         success: true,
@@ -15,4 +15,19 @@ export const getCartItemsController = async (req, res) => {
         data: cartItems,
     });
   
+};
+
+export const addToCartController = async (req, res) => {
+    
+    const { id } = req.user;
+    const { productId, quantity } = req.body;
+
+    // add to cart using the service
+    const cartItem = await addToCartService(id, productId, quantity);
+
+    res.status(200).json({
+        success: true,
+        message: "Product added to cart successfully",
+        data: cartItem,
+    });
 };

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getCartItemsController } from "../controllers/cart.controller.js";
+import { addToCartController, getCartItemsController } from "../controllers/cart.controller.js";
 import { authUserMiddleware } from "../middlewares/auth.middleware.js";
 
 
@@ -12,6 +12,12 @@ let cartRouter = Router();
  */
 cartRouter.get("/", authUserMiddleware ,getCartItemsController);
 
+/**
+ * @description Add a product to the cart
+ * @route POST /api/cart/
+ * @access Private
+ */
+cartRouter.post("/", authUserMiddleware, addToCartController);
 
 
 export default cartRouter;
