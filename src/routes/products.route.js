@@ -1,5 +1,5 @@
 import { Router } from "express";
-import authMiddleware from "../middlewares/auth.middleware.js";
+import {authAdminMiddleware} from "../middlewares/auth.middleware.js";
 import {
   createProductController,
   getAllProductsController,
@@ -32,7 +32,7 @@ productsRouter.get("/:id", getProductByIdController);
  */
 productsRouter.post(
   "/",
-  authMiddleware,
+  authAdminMiddleware,
   upload.array("images"),
   createProductController,
 );
@@ -44,7 +44,7 @@ productsRouter.post(
  */
 productsRouter.patch(
   "/:id",
-  authMiddleware,
+  authAdminMiddleware,
   upload.array("images"),
   updateProductByIdController,
 );
@@ -54,6 +54,6 @@ productsRouter.patch(
  * @route DELETE /api/products/:id
  * @access Private
  */
-productsRouter.delete("/:id", authMiddleware, deleteProductByIdController);
+productsRouter.delete("/:id", authAdminMiddleware, deleteProductByIdController);
 
 export default productsRouter;

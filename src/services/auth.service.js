@@ -16,13 +16,13 @@ export const registerService = async (userData) => {
   if (existingUser) {
     throw new apiError(400, "User already exists");
   }
-  //hash the password
 
   //create new user and save the user to database
   let newUser = await userModel.create({
     name: userData.name,
     email: userData.email,
     password: userData.password,
+    role: userData.role || "user",
   });
 
   // create JWT token for the user
