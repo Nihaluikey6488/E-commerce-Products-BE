@@ -5,6 +5,7 @@ import express from "express";
 import errorMiddleware from "./middlewares/error.middleware.js";
 import authRouter from "./routes/auth.route.js";
 import productsRouter from "./routes/products.route.js";
+import cartRouter from "./routes/cart.route.js";
 
 const app = express();
 app.use(express.json());
@@ -21,6 +22,9 @@ app.use("/api/auth", authRouter);
 
 // Routes for products
 app.use("/api/products", productsRouter);
+
+// Routes for cart
+app.use("/api/cart", cartRouter);
 
 // global error handling middleware
 app.use(errorMiddleware);
