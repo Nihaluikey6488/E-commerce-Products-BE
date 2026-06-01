@@ -10,9 +10,10 @@ A Node.js and Express backend API for an e-commerce products application. It sup
 - Protected product create, update, and delete routes
 - Public product listing and product detail routes
 - Product filtering by category using query params
+- Add products to a user cart with quantity updates
 - Multiple image upload support using Multer memory storage
 - Image upload to ImageKit
-- MongoDB models for users and products
+- MongoDB models for users, products, and cart items
 - Central async error handling middleware
 
 ## Tech Stack
@@ -44,18 +45,22 @@ A Node.js and Express backend API for an e-commerce products application. It sup
     │   └── multer.js
     ├── controllers
     │   ├── auth.controller.js
+    │   ├── cart.controller.js
     │   └── products.controller.js
     ├── middlewares
     │   ├── auth.middleware.js
     │   └── error.middleware.js
     ├── models
     │   ├── auth.model.js
+    │   ├── cart.model.js
     │   └── products.model.js
     ├── routes
     │   ├── auth.route.js
+    │   ├── cart.route.js
     │   └── products.route.js
     ├── services
     │   ├── auth.service.js
+    │   ├── cart.service.js
     │   └── products.service.js
     └── utils
         ├── apiError.js
@@ -275,6 +280,37 @@ Access: Private
 
 Authentication is required. Send the JWT token using the `token` cookie.
 
+## Cart API
+
+### Get Cart Items
+
+```http
+GET /api/cart
+```
+
+Access: Private
+
+Retrieves the authenticated user's cart items. Each item includes product details and quantity.
+
+### Add Product To Cart
+
+```http
+POST /api/cart
+```
+
+Access: Private
+
+Request body:
+
+```json
+{
+  "productId": "605c75d34f1f1c24d8e3b123",
+  "quantity": 2
+}
+```
+
+If the product already exists in the user's cart, the service increments the quantity.
+
 ## Data Models
 
 ### User
@@ -294,6 +330,14 @@ price        number    required
 category     string    default: others
 images       string[]  required
 userId       ObjectId  references user
+```
+
+### Cart
+
+```txt
+userId     ObjectId  required, references user
+productId  ObjectId  required, references product
+quantity   number    required, min: 1
 ```
 
 ## Authentication Flow
