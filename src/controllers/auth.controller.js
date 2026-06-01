@@ -3,9 +3,9 @@ import { registerService, loginService } from "../services/auth.service.js";
 
 // controller to register a user
 export const registerController = asyncHandler(async (req, res, next) => {
-  let { name, email, password } = req.body;
+  let { name, email, password, role } = req.body;
 
-  let userData = { name, email, password };
+  let userData = { name, email, password, role };
   // register the user and get the user and token
   let { user, token } = await registerService(userData);
 

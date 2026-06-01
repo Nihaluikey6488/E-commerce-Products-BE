@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import asyncHandler from "../utils/asyncHandler.js";
 import apiError from "../utils/apiError.js";
+import userModel from "../models/auth.model.js";
 
 // authentication middleware
 export const authAdminMiddleware = asyncHandler(async (req, res, next) => {
@@ -10,10 +11,13 @@ export const authAdminMiddleware = asyncHandler(async (req, res, next) => {
   let user = await jwt.verify(token, process.env.JWT_SECRET);
   if (!user) throw new apiError(401, "Unauthorized user");
 
-  // check if the user is an admin
-  if (user.role !== "admin") {
-    throw new apiError(403, "Access denied. Admin only.");
-  }
+
+
+  // check if the user is an admin or not from db
+    let userData= await userModel.findById(user.id);
+    if(userData.role !== "admin"){
+        throw new apiError(403, "Forbidden. Admins only");
+    }
 
   req.user = user;
 

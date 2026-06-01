@@ -22,7 +22,7 @@ export const registerService = async (userData) => {
     name: userData.name,
     email: userData.email,
     password: userData.password,
-    role: userData.role || "user",
+    role: userData.role,
   });
 
   // create JWT token for the user
