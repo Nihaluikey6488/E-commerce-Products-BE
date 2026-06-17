@@ -54,9 +54,10 @@ export const updateProductByIdController = asyncHandler(async (req, res) => {
   // update product by id
   let product = await updateProductByIdService(id, productData, images);
   // send response to the client
- 
 
-  res.status(200).json(new ApiResponse("Product updated successfully",{product}))
+  res
+    .status(200)
+    .json(new ApiResponse("Product updated successfully", { product }));
 });
 
 // controller to delete a product by id
@@ -64,7 +65,7 @@ export const deleteProductByIdController = asyncHandler(async (req, res) => {
   // get the id from the request parameters
   const { id } = req.params;
   // delete product by id
-  let product = await deleteProductByIdService(id);
+  await deleteProductByIdService(id);
   // send response to the client
 
   res.status(200).json(new ApiResponse("Product deleted successfully"));
