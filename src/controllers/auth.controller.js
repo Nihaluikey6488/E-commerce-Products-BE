@@ -27,7 +27,10 @@ export const loginController = asyncHandler(async (req, res) => {
   let { user, token } = await loginService(userData);
 
   // set token in cookie
-  res.cookie("token", token);
+  res.cookie("token", token,{
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000,
+  });
 
   // send response to the client
   res

@@ -3,11 +3,11 @@ import cartModel from "../models/cart.model.js";
 // service to get cart items for a user
 export const getCartItemsService = async (userId) => {
   // get cart items for the user
-  let cartItems = await cartModel
+return  cartModel
     .find({ userId })
     .populate("productId", "name price images")
-    .exec();
-  return cartItems;
+    
+ 
 };
 
 // service to add a product to the cart
