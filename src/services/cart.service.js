@@ -13,18 +13,18 @@ return  cartModel
 // service to add a product to the cart
 export const addToCartService = async (userId, productId, quantity) => {
   // check if the product is already in the cart
-  let existingCartItem = await cartModel.findOne({ userId, productId });
+  const existingCartItem = await cartModel.findOne({ userId, productId });
 
   if (existingCartItem) {
     // if the product is already in the cart, update the quantity
     existingCartItem.quantity += quantity;
     await existingCartItem.save();
     return existingCartItem;
-  } else {
+  } 
     // if the product is not in the cart, create a new cart item
-    let newCartItem = await cartModel.create({ userId, productId, quantity });
-    return newCartItem;
-  }
+    return cartModel.create({ userId, productId, quantity });
+  
+  
 };
 
 // service to decrease a product from the cart or remove it if quantity becomes 0
