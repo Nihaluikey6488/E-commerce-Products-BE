@@ -1,5 +1,7 @@
 import asyncHandler from "../utils/asyncHandler.js";
 import { registerService, loginService } from "../services/auth.service.js";
+import ApiRespons from "../utils/apiResponse.js";
+import ApiResponse from "../utils/apiResponse.js";
 
 // controller to register a user
 export const registerController = asyncHandler(async (req, res, next) => {
@@ -13,12 +15,7 @@ export const registerController = asyncHandler(async (req, res, next) => {
   res.cookie("token", token);
 
   // send response to the client
-  res.status(201).json({
-    success: true,
-    message: "User registered successfully",
-    user: user,
-    token: token,
-  });
+  res.status(201).json(new ApiResponse("User registered successfully",{user,token}));
 });
 
 // controller to login a user
@@ -31,10 +28,5 @@ export const loginController = asyncHandler(async (req, res) => {
   res.cookie("token", token);
 
   // send response to the client
-  res.status(201).json({
-    success: true,
-    message: "User logged in successfully",
-    user,
-    token,
-  });
+  res.status(201).json(new ApiResponse("User logged in successfully",{user,token}));
 });

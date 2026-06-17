@@ -5,6 +5,7 @@ import {
   updateProductByIdService,
   deleteProductByIdService,
 } from "../services/products.service.js";
+import ApiResponse from "../utils/apiResponse.js";
 import asyncHandler from "../utils/asyncHandler.js";
 
 // controller to create a new product
@@ -27,11 +28,10 @@ export const getAllProductsController = asyncHandler(async (req, res) => {
   // get all products by category
   let products = await getAllProductsService(category);
   // send response to the client
-  res.status(200).json({
-    success: true,
-    message: "Products fetched successfully",
-    products: products,
-  });
+
+  res
+    .status(200)
+    .json(new ApiResponse("Products fetched successfully", { products }));
 });
 
 // controller to get a product by id
@@ -41,11 +41,10 @@ export const getProductByIdController = asyncHandler(async (req, res) => {
   // get product by id
   let product = await getProductByIdService(id);
   // send response to the client
-  res.status(200).json({
-    success: true,
-    message: "Product fetched successfully",
-    product: product,
-  });
+
+  res
+    .status(200)
+    .json(new ApiResponse("Product fetched successfully", { product }));
 });
 
 // controller to update a product by id
@@ -59,11 +58,9 @@ export const updateProductByIdController = asyncHandler(async (req, res) => {
   // update product by id
   let product = await updateProductByIdService(id, productData, images);
   // send response to the client
-  res.status(200).json({
-    success: true,
-    message: "Product updated successfully",
-    product: product,
-  });
+ 
+
+  res.status(200).json(new ApiResponse("Product updated successfully",{product}))
 });
 
 // controller to delete a product by id
@@ -73,8 +70,6 @@ export const deleteProductByIdController = asyncHandler(async (req, res) => {
   // delete product by id
   let product = await deleteProductByIdService(id);
   // send response to the client
-  res.status(200).json({
-    success: true,
-    message: "Product deleted successfully",
-  });
+
+  res.status(200).json(new ApiResponse("Product deleted successfully"));
 });

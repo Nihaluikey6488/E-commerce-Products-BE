@@ -1,4 +1,5 @@
 import { getCartItemsService, addToCartService , decreaseCartItemService} from "../services/cart.service.js";
+import ApiResponse from "../utils/apiResponse.js";
 
 
 /***
@@ -12,11 +13,10 @@ export const getCartItemsController = async (req, res) => {
     // get cart items for the user from the service
     const cartItems = await getCartItemsService(id);
 
-    res.status(200).json({
-        success: true,
-        message: "Cart items retrieved successfully",
-        data: cartItems,
-    });
+   
+    res.status(200).json(new ApiResponse("Cart items retrieved successfully",{cartItems}));
+
+
   
 };
 
@@ -32,12 +32,10 @@ export const addToCartController = async (req, res) => {
     // add to cart using the service
     const cartItem = await addToCartService(id, productId, quantity);
 
-    res.status(200).json({
-        success: true,
-        message: "Product added to cart successfully",
-        data: cartItem,
-    });
+// add to cart response
+    res.status(201).json(new ApiResponse("Product added to cart successfully",{cartItem}))
 };
+
 
 
 /***
@@ -52,10 +50,7 @@ export const decreaseCartItemController = async (req, res) => {
     // decrease cart item using the service
     const cartItem = await decreaseCartItemService(id, productId);
     
-    res.status(200).json({
-        success: true,
-        message: "Cart item updated successfully",
-        data: cartItem,
-    });
-    
+ 
+    // decrease cart item response
+    res.status(200).json(new ApiResponse("Product quantity decreased or removed from the cart successfully",{cartItem}))
 }
