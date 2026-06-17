@@ -67,31 +67,51 @@ export const getProductByIdService = async (id) => {
 };
 
 // service to update a product by id
-export const updateProductByIdService = async (id, productData, images) => {
-  // check if the id is a valid mongoose object id
+
+
+export const updateProductByIdService = async (id, productData, images = []) => {
+  // 1. Validate ObjectId early
   if (!mongoose.Types.ObjectId.isValid(id)) {
     throw new ApiError(400, "Invalid product id");
   }
 
-  // send images to imagekit and get the image urls
-  let imageUrls = [];
-  for (let image of images) {
-    const uploaded = await sendFilesToImageKit(
-      image.buffer,
-      image.originalname,
-    );
-    imageUrls.push(uploaded.url);
-  }
-  // update the product data
-  productData.images = imageUrls;
-  // update the product by id
-  let product = await productModel.findByIdAndUpdate(id, productData);
-  // check if the product is found or not
-  if (!product) {
+  // 2. Check product exists BEFORE doing expensive work
+  const existingProduct = await productModel.findById(id);
+  if (!existingProduct) {
     throw new ApiError(404, "Product not found");
   }
-  // return the product
-  return product;
+
+  // 3. Upload images in parallel (faster)
+  let imageUrls = [];
+  if (images.length > 0) {
+    imageUrls = await Promise.all(
+      images.map(async (image) => {
+        const uploaded = await sendFilesToImageKit(
+          image.buffer,
+          image.originalname
+        );
+        return uploaded.url;
+      })
+    );
+  }
+
+  // 4. Merge images safely (optional logic)
+  const updatedData = {
+    ...productData,
+    ...(imageUrls.length > 0 && { images: imageUrls }),
+  };
+
+  // 5. Update product and return NEW document
+  const updatedProduct = await productModel.findByIdAndUpdate(
+    id,
+    updatedData,
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+
+  return updatedProduct;
 };
 
 // service to delete a product by id
