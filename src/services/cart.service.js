@@ -1,4 +1,5 @@
 import cartModel from "../models/cart.model.js";
+import ApiError from "../utils/apiError.js";
 
 // service to get cart items for a user
 export const getCartItemsService = async (userId) => {
@@ -28,23 +29,31 @@ export const addToCartService = async (userId, productId, quantity) => {
 };
 
 // service to decrease a product from the cart or remove it if quantity becomes 0
-export const decreaseCartItemService = async (userId, productId) => {
-  // find the cart item
-  let cartItem = await cartModel.findOne({ userId, productId });
+export const decreaseCartItemService = async (
+  userId,
+  productId
+) => {
+  const cartItem = await cartModel.findOne({
+    userId,
+    productId,
+  });
 
   if (!cartItem) {
-    throw new Error("Item not found in cart");
+    throw new ApiError(404, "Item not found in cart");
   }
 
-  // decrease the quantity
   cartItem.quantity -= 1;
-  
-  if (cartItem.quantity <= 1) {
-    // if quantity is 0 or less, remove the item from the cart
-    await cartModel.findOneAndDelete({ userId, productId });
-  } else {
-    await cartItem.save();
+
+  if (cartItem.quantity <= 0) {
+    await cartModel.findOneAndDelete({
+      userId,
+      productId,
+    });
+
+    return null;
   }
+
+  await cartItem.save();
 
   return cartItem;
 };
