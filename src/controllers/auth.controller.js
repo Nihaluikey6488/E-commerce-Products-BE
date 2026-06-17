@@ -5,17 +5,19 @@ import ApiResponse from "../utils/apiResponse.js";
 
 // controller to register a user
 export const registerController = asyncHandler(async (req, res) => {
-  let { name, email, password, role } = req.body;
-
-  let userData = { name, email, password, role };
   // register the user and get the user and token
-  let { user, token } = await registerService(userData);
+  const { user, token } = await registerService(req.body);
 
   // set token in cookie
-  res.cookie("token", token);
+  res.cookie("token", token, {
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000,
+  });
 
   // send response to the client
-  res.status(201).json(new ApiResponse("User registered successfully",{user,token}));
+  return res
+    .status(201)
+    .json(new ApiResponse("User registered successfully", { user, token }));
 });
 
 // controller to login a user
@@ -28,5 +30,7 @@ export const loginController = asyncHandler(async (req, res) => {
   res.cookie("token", token);
 
   // send response to the client
-  res.status(201).json(new ApiResponse("User logged in successfully",{user,token}));
+  res
+    .status(201)
+    .json(new ApiResponse("User logged in successfully", { user, token }));
 });
