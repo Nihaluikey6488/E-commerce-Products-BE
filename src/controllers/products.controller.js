@@ -14,11 +14,7 @@ export const createProductController = asyncHandler(async (req, res) => {
   let images = req.files;
   let product = await createProductService(productData, req.user.id, images);
 
-  res.status(201).json({
-    success: true,
-    message: "Product created successfully",
-    product: product,
-  });
+  res.status(201).json(new ApiResponse("Product created successfully"));
 });
 
 // controller to get all products
