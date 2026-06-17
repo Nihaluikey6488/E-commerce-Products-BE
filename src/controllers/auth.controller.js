@@ -4,7 +4,7 @@ import ApiRespons from "../utils/apiResponse.js";
 import ApiResponse from "../utils/apiResponse.js";
 
 // controller to register a user
-export const registerController = asyncHandler(async (req, res, next) => {
+export const registerController = asyncHandler(async (req, res) => {
   let { name, email, password, role } = req.body;
 
   let userData = { name, email, password, role };
