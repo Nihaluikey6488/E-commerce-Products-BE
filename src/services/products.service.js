@@ -1,4 +1,4 @@
-import apiError from "../utils/apiError.js";
+import ApiError from "../utils/ApiError.js";
 import sendFilesToImageKit from "../config/imagekit.js";
 import productModel from "../models/products.model.js";
 import mongoose from "mongoose";
@@ -9,12 +9,12 @@ export const createProductService = async (productData, userId, images) => {
 
   // check if all fields are required
   if (!name || !price) {
-    throw new apiError(400, "All fields are required");
+    throw new ApiError(400, "All fields are required");
   }
 
   // check if images are required
   if (!images || images.length === 0) {
-    throw new apiError(400, "At least one image is required");
+    throw new ApiError(400, "At least one image is required");
   }
 
   // send images to imagekit and get the image urls
@@ -54,13 +54,13 @@ export const getAllProductsService = async (category) => {
 export const getProductByIdService = async (id) => {
   // check if the id is a valid mongoose object id
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    throw new apiError(400, "Invalid product id");
+    throw new ApiError(400, "Invalid product id");
   }
   // find the product by id and populate the userId field with the name of the user
   let product = await productModel.findById(id).populate("userId", "name");
   // check if the product is found
   if (!product) {
-    throw new apiError(404, "Product not found");
+    throw new ApiError(404, "Product not found");
   }
   // return the product
   return product;
@@ -70,7 +70,7 @@ export const getProductByIdService = async (id) => {
 export const updateProductByIdService = async (id, productData, images) => {
   // check if the id is a valid mongoose object id
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    throw new apiError(400, "Invalid product id");
+    throw new ApiError(400, "Invalid product id");
   }
 
   // send images to imagekit and get the image urls
@@ -88,7 +88,7 @@ export const updateProductByIdService = async (id, productData, images) => {
   let product = await productModel.findByIdAndUpdate(id, productData);
   // check if the product is found or not
   if (!product) {
-    throw new apiError(404, "Product not found");
+    throw new ApiError(404, "Product not found");
   }
   // return the product
   return product;
@@ -98,13 +98,13 @@ export const updateProductByIdService = async (id, productData, images) => {
 export const deleteProductByIdService = async (id) => {
   // check if the id is a valid mongoose object id
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    throw new apiError(400, "Invalid product id");
+    throw new ApiError(400, "Invalid product id");
   }
   // delete the product by id
   let product = await productModel.findByIdAndDelete(id);
   // check if the product is found or not
   if (!product) {
-    throw new apiError(404, "Product not found");
+    throw new ApiError(404, "Product not found");
   }
   // return the product
   return product;

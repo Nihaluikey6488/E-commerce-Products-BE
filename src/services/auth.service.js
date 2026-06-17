@@ -1,20 +1,20 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import apiError from "../utils/apiError.js";
+import ApiError from "../utils/ApiError.js";
 import userModel from "../models/auth.model.js";
 
 // service to register a user
 export const registerService = async (userData) => {
   //check for all required fields
   if (!userData.name || !userData.email || !userData.password) {
-    throw new apiError(404, "All fields are required");
+    throw new ApiError(404, "All fields are required");
   }
 
   //check if user already exists
   let existingUser = await userModel.findOne({ email: userData.email });
 
   if (existingUser) {
-    throw new apiError(400, "User already exists");
+    throw new ApiError(400, "User already exists");
   }
 
   //create new user and save the user to database
@@ -37,19 +37,19 @@ export const registerService = async (userData) => {
 export const loginService = async (userData) => {
   //check for all required fields
   if (!userData.email || !userData.password) {
-    throw new apiError(404, "All fields are required");
+    throw new ApiError(404, "All fields are required");
   }
 
   //check if user already exists
   let existingUser = await userModel.findOne({ email: userData.email });
   if (!existingUser) {
-    throw new apiError(400, "User not found. please register first");
+    throw new ApiError(400, "User not found. please register first");
   }
 
   //compare password
   let isPasswordCorrect = await existingUser.comparePassword(userData.password);
 
-  if (!isPasswordCorrect) throw new apiError(401, "Invalid credentials");
+  if (!isPasswordCorrect) throw new ApiError(401, "Invalid credentials");
 
   // create JWT token for the user
   let token = existingUser.generateJWTToken();

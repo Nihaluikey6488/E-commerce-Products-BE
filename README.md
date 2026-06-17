@@ -63,7 +63,7 @@ A Node.js and Express backend API for an e-commerce products application. It sup
     │   ├── cart.service.js
     │   └── products.service.js
     └── utils
-        ├── apiError.js
+        ├── ApiError.js
         └── asyncHandler.js
 ```
 
@@ -359,7 +359,7 @@ quantity   number    required, min: 1
 
 ## Error Handling
 
-The project uses a global error middleware. Services throw custom API errors using `apiError`, and async controllers are wrapped with `asyncHandler` so errors are passed to the middleware automatically.
+The project uses a global error middleware. Services throw custom API errors using `ApiError`, and async controllers are wrapped with `asyncHandler` so errors are passed to the middleware automatically.
 
 Error response format:
 
