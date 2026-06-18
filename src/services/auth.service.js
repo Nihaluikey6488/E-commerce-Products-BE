@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import ApiError from "../utils/ApiError.js";
 import userModel from "../models/auth.model.js";
+import { generateAccessToken } from "../utils/token.js";
 
 // service to register a user
 export const registerService = async (userData) => {
@@ -27,9 +28,7 @@ export const registerService = async (userData) => {
   });
 
   // create JWT token for the user
-  const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-    expiresIn: "1d",
-  });
+  const token =await generateAccessToken(newUser._id)
 
   return { user: newUser, token };
 };  
@@ -53,7 +52,7 @@ export const loginService = async (userData) => {
   if (!isPasswordCorrect) throw new ApiError(401, "Invalid credentials");
 
   // create JWT token for the user
-  const token = existingUser.generateJWTToken();
+  const token = await generateAccessToken(existingUser._id);
 
   return { user: existingUser, token };
 };
