@@ -14,7 +14,7 @@ export const createProductController = asyncHandler(async (req, res) => {
   let images = req.files;
   let product = await createProductService(productData, req.user.id, images);
 
-  res.status(201).json(new ApiResponse("Product created successfully"));
+ return res.status(201).json(new ApiResponse("Product created successfully"));
 });
 
 // controller to get all products
@@ -25,7 +25,7 @@ export const getAllProductsController = asyncHandler(async (req, res) => {
   let products = await getAllProductsService(category);
   // send response to the client
 
-  res
+ return res
     .status(200)
     .json(new ApiResponse("Products fetched successfully", { products }));
 });
@@ -38,7 +38,7 @@ export const getProductByIdController = asyncHandler(async (req, res) => {
   let product = await getProductByIdService(id);
   // send response to the client
 
-  res
+return res
     .status(200)
     .json(new ApiResponse("Product fetched successfully", { product }));
 });
@@ -55,7 +55,7 @@ export const updateProductByIdController = asyncHandler(async (req, res) => {
   let product = await updateProductByIdService(id, productData, images);
   // send response to the client
 
-  res
+ return res
     .status(200)
     .json(new ApiResponse("Product updated successfully", { product }));
 });
@@ -68,5 +68,5 @@ export const deleteProductByIdController = asyncHandler(async (req, res) => {
   await deleteProductByIdService(id);
   // send response to the client
 
-  res.status(200).json(new ApiResponse("Product deleted successfully"));
+ return res.status(200).json(new ApiResponse("Product deleted successfully"));
 });

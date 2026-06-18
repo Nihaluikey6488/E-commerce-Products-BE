@@ -33,7 +33,7 @@ export const loginController = asyncHandler(async (req, res) => {
   });
 
   // send response to the client
-  res
+  return res
     .status(201)
     .json(new ApiResponse("User logged in successfully", { user, token }));
 });

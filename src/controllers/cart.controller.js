@@ -14,7 +14,7 @@ export const getCartItemsController = async (req, res) => {
     const cartItems = await getCartItemsService(id);
 
    
-    res.status(200).json(new ApiResponse("Cart items retrieved successfully",{cartItems}));
+   return res.status(200).json(new ApiResponse("Cart items retrieved successfully",{cartItems}));
 
 
   
@@ -33,7 +33,7 @@ export const addToCartController = async (req, res) => {
     const cartItem = await addToCartService(id, productId, quantity);
 
 // add to cart response
-    res.status(201).json(new ApiResponse("Product added to cart successfully",{cartItem}))
+  return  res.status(201).json(new ApiResponse("Product added to cart successfully",{cartItem}))
 };
 
 
@@ -52,5 +52,5 @@ export const decreaseCartItemController = async (req, res) => {
     
  
     // decrease cart item response
-    res.status(200).json(new ApiResponse("Product quantity decreased or removed from the cart successfully",{cartItem}))
+   return res.status(200).json(new ApiResponse("Product quantity decreased or removed from the cart successfully",{cartItem}))
 }
